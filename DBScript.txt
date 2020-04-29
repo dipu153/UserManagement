@@ -1,0 +1,16 @@
+﻿CREATE TABLE [dbo].[Employee](
+	[ID] [int] IDENTITY(1,1) NOT NULL,
+	[Password] [nvarchar](50) NOT NULL,
+	[FirstName] [nvarchar](50) NOT NULL,
+	[LastName] [nvarchar](50) NOT NULL,
+	[Gender] [nvarchar](15) NOT NULL,
+	[Contact] [nvarchar](15) NOT NULL,
+	[UserRole] [nvarchar](15) NULL,
+	[Email] [nvarchar](50) NOT NULL,
+	[VisitLink] [bit] NULL,
+	[Reminder] [int] NULL,
+ CONSTRAINT [PK_Employee] PRIMARY KEY CLUSTERED 
+(
+	[ID] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
