@@ -1,0 +1,14 @@
+﻿@{
+    ViewBag.Title = "UserDashBoard";
+}
+<script>alert(Session["UserName"]);</script>
+<fieldset>
+    <legend>User DashBoard</legend>
+
+    @if (Session["UserName"] != null)
+    {
+        <text>
+            Welcome @Session["UserName"].ToString()
+        </text>
+    }
+</fieldset>

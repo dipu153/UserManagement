@@ -1,0 +1,89 @@
+﻿@using UserManagement.Models
+@model LoginModel
+<link href="~/Content/bootstrap.css" rel="stylesheet" />
+<link href="~/Content/bootstrap-theme.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-3.3.1.js"></script>
+<script src="~/Scripts/bootstrap.js"></script>
+@using (Html.BeginForm("validateuser", "Home", FormMethod.Post, new { role = "form" }))
+{
+    <script>
+    $(document).ready(function () {
+        $('#savedata').click(function () {
+            var data = {
+                "email": $("#email").val(),
+                "pass": $("#pass").val()
+            };
+            $.ajax({
+                url: "/Home/validateuser",
+                type: "POST",
+                data: JSON.stringify(data),
+                dataType: "json",
+                contentType: "application/json",
+                success: function (response) {
+                    if (response.Success) {
+                        window.location.href = "@Url.Action("UserDashBoard", "Home")";
+                     }
+                    else
+                        window.location.href = "@Url.Action("Login", "Home")";
+                },
+                error: function () {
+                    console.log('Login Fail!!!');
+                }
+            });
+        });
+        $("#registerBtn").on("click", function ()
+        {
+            window.location.href = "Home/Register";
+        })
+    });
+    </script>
+
+    <div class="container">
+        <div class="row">
+            <h2 class="text-center">Login to Your Account</h2>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                            @Html.TextBoxFor(m => m.email, new { @class = "form-control", autocomplete = "off", placeholder = "Email ID", id = "email" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                            @Html.PasswordFor(m => m.pass, new { @class = "form-control", id = "password", placeholder = "Password" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <button class="btn btn-warning form-control" type="submit"><i class="glyphicon glyphicon-log-in"></i>&nbsp;Login</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <button class="btn btn-warning form-control" type="button" id="registerBtn"><i class="glyphicon glyphicon-registration-mark"></i>&nbsp;Register</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    <div class="col-md-12" style="text-align:center;">
+                        <h3>@Html.ValidationMessage("Msg")</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

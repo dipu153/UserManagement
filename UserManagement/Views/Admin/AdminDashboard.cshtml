@@ -1,0 +1,92 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<link href="~/Content/bootstrap.css" rel="stylesheet" />
+
+<link href="~/Content/bootstrap-theme.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-3.3.1.js"></script>
+<script src="~/Scripts/bootstrap.js"></script>
+<script src="~/Scripts/1.5.8.angular.min.js"></script>
+
+<script>
+    var app = angular.module("UserManagementApp", []);
+    app.controller("UserManagementCtrl", function ($scope, $http) {
+        $scope.UserRoles = ["Admin","Account","User"];
+
+        $scope.AllRegUsers = [];
+        AllRegUsers();
+        function AllRegUsers() {
+            debugger;
+            $http.get('/Admin/GetAllUser').then(function success(response) {
+                $scope.AllRegUsers = response.data;
+                console.log($scope.AllRegUsers);
+            }, function error(response) {
+                alert(response.status);
+            });
+        }
+
+        $scope.UpdateRoles = function ()
+        {
+            var myData = $scope.AllRegUsers;
+            var myReq = {
+                method: 'POST',
+                url: '/Admin/UpdateRoles',
+                headers: {
+
+                },
+                data: { UpdateUsers: myData }
+            };
+            $http(myReq).then(function success(response) {
+                alert(response.data);
+                window.location.reload();
+            });
+        }
+
+    });
+</script>
+
+
+<div ng-app="UserManagementApp" ng-controller="UserManagementCtrl" class="container">
+
+    <fieldset>
+        <legend>Admin DashBoard</legend>
+        @if (Session["UserName"] != null)
+        {
+            <text>
+                Welcome @Session["UserName"].ToString()
+            </text>
+        }
+    </fieldset>
+
+    <div class="row">
+        <table class="table table-striped" style="width:85%">
+            <tr>
+                <td>Sl No</td>
+                <td>Name</td>
+                <td>Contact</td>
+                <td>Email</td>
+                <td>Gender</td>
+                <td>Role</td>
+            </tr>
+
+            <tr ng-repeat="Usr in AllRegUsers">
+                <td class="col-md-1"> {{($index+1)}}  </td>
+                <td class="col-md-3">{{Usr.FirstName}} {{Usr.LastName}}</td>
+                <td class="col-md-2">{{Usr.Contact}}</td>
+                <td class="col-md-3">{{Usr.Email}}</td>
+                <td class="col-md-1">{{Usr.Gender}}</td>
+                <td class="col-md-2">
+                    <select ng-model="Usr.UserRole" name="Roles" class="btn btn-default dropdown-toggle form-control" data-toggle="dropdown-menu" ng-options="i for i in UserRoles track by i" >
+                        <option value="">-- Select --</option>
+                    </select>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="col-md-2">
+        <button type="button" value="Update" class="btn btn-sm btn-primary" ng-click="UpdateRoles()">Update Roles</button>
+    </div>
+</div>
