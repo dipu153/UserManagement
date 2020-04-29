@@ -1,0 +1,160 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Register</title>
+    <link href="~/Content/bootstrap.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap-theme.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery-3.3.1.js"></script>
+    <script src="~/Scripts/bootstrap.js"></script>
+
+</head>
+<body>
+    @using (Html.BeginForm("Register", "Home", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+    {
+        <h4>User Registration</h4>
+        <hr />
+        <div class="form-group">
+            <label class="col-md-2 control-label">FirstName</label>
+            <div class="col-md-10">
+                <div class="input-group">
+                    <input type="text" name="FirstName" class="form-control" autocomplete="off" id="txtFstName" />
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 control-label">Last Name</label>
+            <div class="col-md-10">
+                <div class="input-group">
+                    <input type="text" name="LastName" class="form-control" autocomplete="off" id="txtlstName" />
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 control-label">Contact</label>
+            <div class="col-md-10">
+                <div class="input-group">
+                    <input type="text" name="Contact" class="form-control" autocomplete="off" id="txtcontact" />
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 control-label">gender</label>
+            <div class="col-md-10">
+                <div class="input-group">
+                    <input type="radio" value="Male" name="gender" />Male
+                    <input type="radio" value="Female" name="gender" />Female
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 control-label">Email</label>
+            <div class="col-md-10">
+                <div class="input-group">
+                    <input type="email" name="Email" class="form-control" autocomplete="off" id="txtmail" />
+                </div>
+            </div>
+        </div> <div class="form-group">
+            <label class="col-md-2 control-label">Password</label>
+            <div class="col-md-10">
+                <div class="input-group">
+                    <input type="password" name="Password" class="form-control" autocomplete="off" id="txtpass" />
+                </div>
+            </div>
+        </div> <div class="form-group">
+            <label class="col-md-2 control-label">Confirm Password</label>
+            <div class="col-md-10">
+                <div class="input-group">
+                    <input type="password" name="CnfPassword" class="form-control" autocomplete="off" id="txtcnfPass" />
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="button" class="btn btn-default" value="Register" id="btnRegister" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group">
+                <div class="col-md-12" style="text-align:center;">
+                    <label id="lblErrorMsg"></label>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            $(document).ready(function () {
+                $("#btnRegister").click(function () {
+                    debugger;
+                    var pass = $("#txtpass").val();
+                    var confpass = $("#txtcnfPass").val();
+
+                    if (pass != confpass) {
+                        $("#lblErrorMsg").text("Password and Confirm Password Must be same");
+                        $("#txtpass").val("");
+                        $("#txtcnfPass").val("");
+                    }
+                    else {
+                        var data = {
+                            FirstName: $("#txtFstName").val(),
+                            LastName: $("#txtlstName").val(),
+                            Contact: $("#txtcontact").val(),
+                            Password: $("#txtpass").val(),
+                            Email: $("#txtmail").val(),
+                            Gender: $("input[name='gender']:checked").val()
+                        }
+                        if (data.FirstName != "") {
+                            if (data.LastName != "") {
+                                if (data.Contact != "") {
+                                    if (data.Password != "") {
+                                        if (data.Email != "") {
+                                            if (data.Gender != "") {
+                                                $.ajax({
+                                                    url: "/Home/RegisterForm",
+                                                    type: "POST",
+                                                    data: JSON.stringify({ emp: data }),
+                                                    dataType: "json",
+                                                    contentType: "application/json",
+                                                    success: function (response) {
+                                                        if (response.Success == "200") {
+                                                            $("#lblErrorMsg").text("Data Saved Successfully");
+                                                            $("#txtFstName").val("");
+                                                            $("#txtlstName").val("");
+                                                            $("#txtcontact").val("");
+                                                            $("#txtpass").val("");
+                                                            $("#txtcnfPass").val("");
+                                                            $("#txtmail").val("");
+                                                            $("input[name='gender']:checked").val("");
+                                                        }
+                                                        else {
+                                                            $("#lblErrorMsg").text("Failed to Register");
+                                                        }
+                                                    },
+                                                    error: function () {
+                                                        console.log('Login Fail!!!');
+                                                    }
+                                                });
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                    }
+
+                });
+            });
+        </script>
+    }
+
+
+
+
+</body>
+</html>
